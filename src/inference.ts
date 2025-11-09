@@ -86,7 +86,8 @@ export class TtsSession {
     this.#ort = await import("onnxruntime-web");
 
     this.#ort.env.allowLocalModels = false;
-    this.#ort.env.wasm.numThreads = navigator.hardwareConcurrency;
+    this.#ort.env.wasm.numThreads = 1; // Force single-thread for COEP compatibility
+
     this.#ort.env.wasm.wasmPaths = this.#wasmPaths.onnxWasm;
     // `${import.meta.env.DEV ? '../assets' : '.'}/` || ONNX_WASM
 
