@@ -1,28 +1,24 @@
-import path from 'path';
-import { defineConfig } from 'vite';
-import dts from 'vite-plugin-dts';
+import { defineConfig } from "vite";
+import dts from "vite-plugin-dts";
 
 export default defineConfig({
-  publicDir: process.env.NODE_ENV !== 'production' ? './assets' : '',
   build: {
-    minify: false,
     lib: {
-      entry: path.resolve(__dirname, 'src/index.ts'),
-      name: 'vits-web',
-      formats: ['es']
+      entry: "src/entry-single.ts",
+      name: "piper-tts-web",
+      fileName: () => "piper-tts-web.js",
+      formats: ["es"],
     },
     rollupOptions: {
-      external: [
-        '**/*.spec.ts',
-        'onnxruntime-web'
-      ],
+      external: ["onnxruntime-web"],
     },
+    sourcemap: false,
+    minify: true,
   },
-  plugins: [dts({ exclude: "**/*.spec.ts" })],
-  server: {
-    headers: {
-      'Cross-Origin-Embedder-Policy': 'require-corp',
-      'Cross-Origin-Opener-Policy': 'same-origin',
-    },
-  },
+  plugins: [
+    dts({
+      insertTypesEntry: true,
+      outDir: "dist",
+    }),
+  ],
 });
