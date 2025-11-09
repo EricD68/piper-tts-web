@@ -1,34 +1,25 @@
 name: build-and-release
 on:
   push:
-    tags: ["v*.*.*"]
+    tags:
+      - 'v*.*.*'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Use Node 20
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '20'
 
-      - name: Install deps (npm)
-        run: npm i --no-audit --no-fund
+      - run: npm ci || npm i --no-audit --no-fund
 
-      - name: Build
-        run: npm run build
+      - run: npm run build
 
-      - name: Upload dist artifact
-        uses: actions/upload-artifact@v4
+      - uses: softprops/action-gh-release@v2
         with:
-          name: dist
-          path: dist/**
-
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: dist/**/*
-
+          files: |
+            dist/piper-tts-web.js
+            dist/index.d.ts
