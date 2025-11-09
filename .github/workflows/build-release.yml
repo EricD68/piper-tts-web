@@ -8,19 +8,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9
+
+      - name: Use Node 20
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: "pnpm"
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm build
-      - uses: actions/upload-artifact@v4
+          # no cache to avoid lockfile requirement
+
+      - name: Install deps (npm)
+        run: npm i --no-audit --no-fund
+
+      - name: Build
+        run: npm run build
+
+      - name: Upload dist artifact
+        uses: actions/upload-artifact@v4
         with:
           name: dist
           path: dist/**
-      - uses: softprops/action-gh-release@v2
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
         with:
           files: dist/**/*
