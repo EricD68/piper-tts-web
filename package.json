@@ -47,6 +47,10 @@
     "test": "npx playwright test --project=chromium",
     "verify": "yarn build && cd scripts && node refresh-and-validate.mjs && cd .."
   },
+  "dependencies": {
+  "onnxruntime-web": "^1.19.0"
+},
+
   "devDependencies": {
     "@playwright/test": "^1.35.1",
     "object-deep-compare": "^1.2.0",
